@@ -19,7 +19,11 @@ const CropScanInterface = ({ language, onNavigate, onPhotoTaken }: CropScanInter
   const startCamera = async () => {
     try {
       const mediaStream = await navigator.mediaDevices.getUserMedia({ 
-        video: { facingMode: 'environment' } // Prefer back camera
+        video: { 
+          facingMode: 'environment', // Prefer back camera
+          width: { ideal: 1280 },
+          height: { ideal: 720 }
+        } 
       });
       setStream(mediaStream);
       setIsCapturing(true);
