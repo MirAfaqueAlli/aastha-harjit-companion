@@ -18,12 +18,19 @@ const buttonVariants = cva(
           "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
+        // Farm app specific variants
+        farm: "farm-button bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg",
+        "farm-accent": "farm-button bg-accent text-accent-foreground hover:bg-accent/90 shadow-lg",
+        "farm-large": "farm-button-large bg-primary text-primary-foreground hover:bg-primary/90 shadow-xl",
+        "farm-voice": "farm-button-large bg-accent text-accent-foreground hover:bg-accent/90 shadow-xl pulse-gentle",
       },
       size: {
         default: "h-10 px-4 py-2",
         sm: "h-9 rounded-md px-3",
         lg: "h-11 rounded-md px-8",
         icon: "h-10 w-10",
+        "farm-xl": "h-20 w-20 rounded-2xl",
+        "farm-wide": "h-16 px-8 rounded-xl min-w-[200px]",
       },
     },
     defaultVariants: {
