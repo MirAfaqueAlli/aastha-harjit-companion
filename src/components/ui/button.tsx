@@ -18,11 +18,16 @@ const buttonVariants = cva(
           "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
-        // Farm app specific variants
-        farm: "farm-button bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg",
-        "farm-accent": "farm-button bg-accent text-accent-foreground hover:bg-accent/90 shadow-lg",
-        "farm-large": "farm-button-large bg-primary text-primary-foreground hover:bg-primary/90 shadow-xl",
-        "farm-voice": "farm-button-large bg-accent text-accent-foreground hover:bg-accent/90 shadow-xl pulse-gentle",
+        // Modern glass button variants
+        glass: "glass-card text-foreground hover:text-foreground border-0",
+        "glass-primary": "farm-button",
+        "glass-accent": "farm-button farm-button-accent",
+        "glass-large": "farm-button-large",
+        // Keep old variants for compatibility during transition
+        farm: "farm-button",
+        "farm-accent": "farm-button farm-button-accent",
+        "farm-large": "farm-button-large",
+        "farm-voice": "farm-button-large pulse-gentle",
       },
       size: {
         default: "h-10 px-4 py-2",

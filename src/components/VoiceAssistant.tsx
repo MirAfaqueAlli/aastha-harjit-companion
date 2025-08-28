@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { ArrowLeft, Mic, MicOff } from "lucide-react";
+import { ArrowLeft, Mic, MicOff, MessageCircle } from "lucide-react";
 
 interface VoiceAssistantProps {
   language: 'en' | 'pa';
@@ -26,7 +25,6 @@ const VoiceAssistant = ({ language, onNavigate }: VoiceAssistantProps) => {
   const startListening = () => {
     setIsListening(true);
     
-    // Mock voice interaction for demo
     setTimeout(() => {
       const userMessage: Message = {
         type: 'user',
@@ -52,38 +50,43 @@ const VoiceAssistant = ({ language, onNavigate }: VoiceAssistantProps) => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen mobile-safe">
       {/* Header */}
-      <header className="bg-card shadow-sm p-4">
+      <header className="glass-card mx-4 mt-4 p-4 mb-6">
         <div className="flex items-center gap-3">
           <Button
             variant="ghost"
             size="icon"
             onClick={() => onNavigate('home')}
+            className="rounded-full"
           >
             <ArrowLeft className="h-6 w-6" />
           </Button>
-          <h1 className="farm-text-large text-primary">
+          <h1 className="farm-text-large">
             {isEnglish ? 'Ask Aastha' : 'ਆਸਥਾ ਨੂੰ ਪੁੱਛੋ'}
           </h1>
         </div>
       </header>
 
-      <main className="p-4">
+      <main className="px-4">
         <div className="max-w-lg mx-auto space-y-6">
-          {/* Greeting Card */}
-          <Card className="p-6 text-center">
-            <p className="farm-text-large text-primary mb-4">
-              {greetingText}
-            </p>
+          {/* Voice Interface Card */}
+          <div className="floating-card p-8 text-center space-y-6">
+            <div className="space-y-4">
+              <div className="bg-gradient-to-br from-primary/20 to-accent/20 p-4 rounded-full w-fit mx-auto">
+                <MessageCircle className="h-12 w-12 text-primary" />
+              </div>
+              <h2 className="farm-text-xl text-primary">
+                {greetingText}
+              </h2>
+            </div>
             
             {/* Voice Button */}
-            <div className="flex justify-center mb-6">
+            <div className="flex justify-center">
               <Button
-                variant={isListening ? "destructive" : "farm-voice"}
-                size="farm-xl"
+                variant={isListening ? "destructive" : "glass-accent"}
+                className={`rounded-full h-24 w-24 ${isListening ? 'pulse-gentle' : ''}`}
                 onClick={isListening ? stopListening : startListening}
-                className="rounded-full"
               >
                 {isListening ? (
                   <MicOff className="h-12 w-12" />
@@ -94,13 +97,15 @@ const VoiceAssistant = ({ language, onNavigate }: VoiceAssistantProps) => {
             </div>
             
             {/* Status Text */}
-            <p className="text-muted-foreground">
-              {isListening 
-                ? (isEnglish ? "Listening..." : "ਸੁਣ ਰਿਹਾ ਹੈ...")
-                : (isEnglish ? "Tap to speak" : "ਬੋਲਣ ਲਈ ਦਬਾਓ")
-              }
-            </p>
-          </Card>
+            <div className="info-card">
+              <p className="text-sm font-medium">
+                {isListening 
+                  ? (isEnglish ? "Listening..." : "ਸੁਣ ਰਿਹਾ ਹੈ...")
+                  : (isEnglish ? "Tap to speak" : "ਬੋਲਣ ਲਈ ਦਬਾਓ")
+                }
+              </p>
+            </div>
+          </div>
 
           {/* Conversation History */}
           {messages.length > 0 && (
@@ -110,53 +115,57 @@ const VoiceAssistant = ({ language, onNavigate }: VoiceAssistantProps) => {
               </h3>
               
               {messages.map((message, index) => (
-                <Card key={index} className={`p-4 ${
-                  message.type === 'user' 
-                    ? 'bg-primary text-primary-foreground ml-8' 
-                    : 'bg-accent text-accent-foreground mr-8'
+                <div key={index} className={`${
+                  message.type === 'user' ? 'ml-8' : 'mr-8'
                 }`}>
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-2">
-                      <span className="font-semibold text-sm">
-                        {message.type === 'user' 
-                          ? (isEnglish ? 'You' : 'ਤੁਸੀਂ')
-                          : 'Aastha'
-                        }
-                      </span>
-                      <span className="text-xs opacity-70">
-                        {message.timestamp.toLocaleTimeString()}
-                      </span>
+                  <div className={`glass-card p-4 ${
+                    message.type === 'user' 
+                      ? 'bg-gradient-to-r from-primary/20 to-primary/10' 
+                      : 'bg-gradient-to-r from-accent/20 to-accent/10'
+                  }`}>
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2">
+                        <span className="font-semibold text-sm">
+                          {message.type === 'user' 
+                            ? (isEnglish ? 'You' : 'ਤੁਸੀਂ')
+                            : 'Aastha'
+                          }
+                        </span>
+                        <span className="text-xs text-muted-foreground">
+                          {message.timestamp.toLocaleTimeString()}
+                        </span>
+                      </div>
+                      <p className="text-sm leading-relaxed">{message.text}</p>
                     </div>
-                    <p className="text-sm leading-relaxed">{message.text}</p>
                   </div>
-                </Card>
+                </div>
               ))}
             </div>
           )}
           
           {/* Quick Actions */}
-          <div className="space-y-3">
+          <div className="space-y-4">
             <h3 className="farm-text-large">
               {isEnglish ? 'Quick Actions' : 'ਤੁਰੰਤ ਕਾਰਵਾਈਆਂ'}
             </h3>
             
-            <Button
-              variant="farm"
-              size="farm-wide"
-              onClick={() => onNavigate('scan')}
-              className="w-full"
-            >
-              {isEnglish ? 'Scan Another Crop' : 'ਹੋਰ ਫ਼ਸਲ ਸਕੈਨ ਕਰੋ'}
-            </Button>
-            
-            <Button
-              variant="farm-accent"
-              size="farm-wide"
-              onClick={() => onNavigate('data')}
-              className="w-full"
-            >
-              {isEnglish ? 'View Farm Data' : 'ਫਾਰਮ ਡਾਟਾ ਦੇਖੋ'}
-            </Button>
+            <div className="grid grid-cols-1 gap-3">
+              <Button
+                variant="glass-primary"
+                className="h-12 justify-start"
+                onClick={() => onNavigate('scan')}
+              >
+                {isEnglish ? 'Scan Another Crop' : 'ਹੋਰ ਫ਼ਸਲ ਸਕੈਨ ਕਰੋ'}
+              </Button>
+              
+              <Button
+                variant="glass"
+                className="h-12 justify-start"
+                onClick={() => onNavigate('data')}
+              >
+                {isEnglish ? 'View Farm Data' : 'ਫਾਰਮ ਡਾਟਾ ਦੇਖੋ'}
+              </Button>
+            </div>
           </div>
         </div>
       </main>

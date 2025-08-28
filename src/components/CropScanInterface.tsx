@@ -1,7 +1,6 @@
 import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Camera, ArrowLeft } from "lucide-react";
+import { Camera, ArrowLeft, Focus } from "lucide-react";
 
 interface CropScanInterfaceProps {
   language: 'en' | 'pa';
@@ -20,7 +19,7 @@ const CropScanInterface = ({ language, onNavigate, onPhotoTaken }: CropScanInter
     try {
       const mediaStream = await navigator.mediaDevices.getUserMedia({ 
         video: { 
-          facingMode: 'environment', // Prefer back camera
+          facingMode: 'environment',
           width: { ideal: 1280 },
           height: { ideal: 720 }
         } 
@@ -33,7 +32,6 @@ const CropScanInterface = ({ language, onNavigate, onPhotoTaken }: CropScanInter
       }
     } catch (error) {
       console.error('Error accessing camera:', error);
-      // Fallback for demo purposes
       setIsCapturing(true);
     }
   };
@@ -63,7 +61,6 @@ const CropScanInterface = ({ language, onNavigate, onPhotoTaken }: CropScanInter
         onNavigate('diagnosis');
       }
     } else {
-      // Demo mode - simulate taking a photo
       onPhotoTaken('demo-image-data');
       stopCamera();
       onNavigate('diagnosis');
@@ -71,9 +68,9 @@ const CropScanInterface = ({ language, onNavigate, onPhotoTaken }: CropScanInter
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen mobile-safe">
       {/* Header */}
-      <header className="bg-card shadow-sm p-4">
+      <header className="glass-card mx-4 mt-4 p-4 mb-6">
         <div className="flex items-center gap-3">
           <Button
             variant="ghost"
@@ -82,42 +79,52 @@ const CropScanInterface = ({ language, onNavigate, onPhotoTaken }: CropScanInter
               stopCamera();
               onNavigate('home');
             }}
+            className="rounded-full"
           >
             <ArrowLeft className="h-6 w-6" />
           </Button>
-          <h1 className="farm-text-large text-primary">
+          <h1 className="farm-text-large">
             {isEnglish ? 'Crop Scan' : 'ਫ਼ਸਲ ਸਕੈਨ'}
           </h1>
         </div>
       </header>
 
-      {/* Camera Interface */}
-      <main className="p-4">
+      <main className="px-4">
         <div className="max-w-lg mx-auto">
           {!isCapturing ? (
-            <Card className="p-8 text-center space-y-6">
-              <Camera className="h-24 w-24 mx-auto text-primary" />
-              <div className="space-y-4">
-                <h2 className="farm-text-large">
-                  {isEnglish ? 'Ready to scan your crop?' : 'ਆਪਣੀ ਫ਼ਸਲ ਸਕੈਨ ਕਰਨ ਲਈ ਤਿਆਰ?'}
-                </h2>
-                <p className="text-muted-foreground">
-                  {isEnglish ? 'Focus on the leaf for best results' : 'ਵਧੀਆ ਨਤੀਜਿਆਂ ਲਈ ਪੱਤੇ ਤੇ ਫੋਕਸ ਕਰੋ'}
-                </p>
+            <div className="space-y-6">
+              {/* Instructions Card */}
+              <div className="floating-card p-8 text-center space-y-6">
+                <div className="bg-gradient-to-br from-primary/20 to-accent/20 p-6 rounded-full w-fit mx-auto">
+                  <Camera className="h-16 w-16 text-primary" />
+                </div>
+                <div className="space-y-4">
+                  <h2 className="farm-text-xl">
+                    {isEnglish ? 'Ready to scan your crop?' : 'ਆਪਣੀ ਫ਼ਸਲ ਸਕੈਨ ਕਰਨ ਲਈ ਤਿਆਰ?'}
+                  </h2>
+                  <div className="info-card">
+                    <div className="flex items-center gap-3">
+                      <Focus className="h-5 w-5 text-primary" />
+                      <p className="text-sm">
+                        {isEnglish ? 'Focus on the leaf for best results' : 'ਵਧੀਆ ਨਤੀਜਿਆਂ ਲਈ ਪੱਤੇ ਤੇ ਫੋਕਸ ਕਰੋ'}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <Button
+                  variant="glass-primary"
+                  className="w-full h-14 text-lg"
+                  onClick={startCamera}
+                >
+                  <Camera className="h-6 w-6 mr-3" />
+                  {isEnglish ? 'Start Camera' : 'ਕੈਮਰਾ ਸ਼ੁਰੂ ਕਰੋ'}
+                </Button>
               </div>
-              <Button
-                variant="farm-large"
-                size="farm-wide"
-                onClick={startCamera}
-                className="w-full"
-              >
-                {isEnglish ? 'Start Camera' : 'ਕੈਮਰਾ ਸ਼ੁਰੂ ਕਰੋ'}
-              </Button>
-            </Card>
+            </div>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-6">
               {/* Camera View */}
-              <Card className="relative overflow-hidden rounded-2xl">
+              <div className="relative overflow-hidden rounded-3xl floating-card">
                 <video
                   ref={videoRef}
                   autoPlay
@@ -126,23 +133,27 @@ const CropScanInterface = ({ language, onNavigate, onPhotoTaken }: CropScanInter
                 />
                 <canvas ref={canvasRef} className="hidden" />
                 
-                {/* Guidance Text Overlay */}
-                <div className="absolute top-4 left-4 right-4">
-                  <div className="bg-black/50 text-white px-4 py-2 rounded-lg text-center">
-                    <p className="farm-text-large">
+                {/* Guidance Overlay */}
+                <div className="absolute top-6 left-6 right-6">
+                  <div className="glass-card p-4 text-center border border-white/30">
+                    <p className="text-white font-semibold">
                       {isEnglish ? 'Focus on the leaf' : 'ਪੱਤੇ ਤੇ ਫੋਕਸ ਕਰੋ'}
                     </p>
                   </div>
                 </div>
-              </Card>
+
+                {/* Focus Frame */}
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="w-64 h-64 border-4 border-white/50 rounded-2xl border-dashed"></div>
+                </div>
+              </div>
               
               {/* Capture Button */}
               <div className="flex justify-center">
                 <Button
-                  variant="farm-voice"
-                  size="farm-xl"
+                  variant="glass-accent"
+                  className="rounded-full h-20 w-20 pulse-gentle"
                   onClick={takePhoto}
-                  className="rounded-full"
                 >
                   <Camera className="h-8 w-8" />
                 </Button>

@@ -6,40 +6,55 @@
 
 @layer base {
   :root {
-    /* Core farming app colors */
-    --background: 0 0% 96%; /* Off-white #F5F5F5 */
-    --foreground: 0 0% 20%; /* Dark Gray #333333 */
+    /* Modern gradient backgrounds */
+    --background: 120 30% 95%; /* Light green base */
+    --foreground: 0 0% 15%; /* Dark text */
 
+    /* Glassmorphic card effects */
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 20%;
+    --card-foreground: 0 0% 15%;
+    --card-glass: 0 0% 100% / 0.7; /* Semi-transparent white */
 
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 20%;
+    --popover-foreground: 0 0% 15%;
 
-    /* Forest Green primary - represents growth and nature */
-    --primary: 120 100% 25%; /* Forest Green #008000 */
-    --primary-foreground: 0 0% 100%;
+    /* Enhanced primary colors */
+    --primary: 120 60% 35%; /* Rich forest green */
+    --primary-foreground: 0 0% 98%;
+    --primary-light: 120 40% 70%; /* Lighter green for gradients */
 
-    /* Amber accent - for buttons and highlights */
-    --accent: 45 100% 51%; /* Amber #FFC107 */
-    --accent-foreground: 0 0% 20%;
+    /* Vibrant accent */
+    --accent: 35 90% 55%; /* Warm orange-amber */
+    --accent-foreground: 0 0% 15%;
+    --accent-light: 35 70% 75%; /* Lighter accent for gradients */
 
-    --secondary: 0 0% 96%;
-    --secondary-foreground: 0 0% 20%;
+    --secondary: 120 20% 90%;
+    --secondary-foreground: 0 0% 15%;
 
-    --muted: 0 0% 90%;
+    --muted: 120 15% 88%;
     --muted-foreground: 0 0% 45%;
 
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 100%;
+    --destructive: 0 75% 55%;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 0 0% 85%;
+    --border: 120 15% 85%;
     --input: 0 0% 100%;
-    --ring: 120 100% 25%;
+    --ring: 120 60% 35%;
 
-    --radius: 0.5rem;
+    --radius: 1.5rem; /* More rounded corners */
 
-    /* Mobile-specific improvements */
+    /* Custom gradients for modern look */
+    --gradient-primary: linear-gradient(135deg, hsl(120 60% 35%), hsl(120 40% 50%));
+    --gradient-accent: linear-gradient(135deg, hsl(35 90% 55%), hsl(35 70% 65%));
+    --gradient-background: linear-gradient(180deg, hsl(120 30% 95%), hsl(120 25% 90%));
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 100% / 0.8), hsl(0 0% 100% / 0.6));
+
+    /* Shadows for depth */
+    --shadow-card: 0 8px 32px hsl(120 30% 20% / 0.1);
+    --shadow-card-hover: 0 12px 40px hsl(120 30% 20% / 0.15);
+    --shadow-floating: 0 20px 60px hsl(120 30% 20% / 0.2);
+
+    /* Mobile safe areas */
     --safe-area-inset-top: env(safe-area-inset-top);
     --safe-area-inset-bottom: env(safe-area-inset-bottom);
     --safe-area-inset-left: env(safe-area-inset-left);
@@ -107,10 +122,12 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    background: var(--gradient-background);
+    color: hsl(var(--foreground));
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
     font-size: 16px;
     line-height: 1.5;
+    min-height: 100vh;
     /* Mobile safe area support */
     padding-top: var(--safe-area-inset-top);
     padding-bottom: var(--safe-area-inset-bottom);
@@ -118,35 +135,93 @@
     padding-right: var(--safe-area-inset-right);
   }
 
-  /* Large, accessible buttons for farmers */
+  /* Modern glassmorphic cards */
+  .glass-card {
+    background: var(--gradient-card);
+    backdrop-filter: blur(20px);
+    border: 1px solid hsl(0 0% 100% / 0.2);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-card);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .glass-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-card-hover);
+  }
+
+  .floating-card {
+    background: hsl(var(--card));
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-floating);
+    border: 1px solid hsl(var(--border));
+  }
+
+  /* Enhanced farm buttons */
   .farm-button {
-    @apply min-h-[4rem] text-lg font-semibold rounded-lg transition-all duration-200;
+    @apply min-h-[4rem] text-lg font-semibold rounded-2xl transition-all duration-300;
+    background: var(--gradient-primary);
+    color: hsl(var(--primary-foreground));
+    box-shadow: var(--shadow-card);
+    border: none;
+  }
+
+  .farm-button:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-card-hover);
+  }
+
+  .farm-button-accent {
+    background: var(--gradient-accent);
+    color: hsl(var(--accent-foreground));
   }
 
   .farm-button-large {
-    @apply min-h-[6rem] text-xl font-bold rounded-xl;
+    @apply min-h-[6rem] text-xl font-bold rounded-3xl;
+    background: var(--gradient-primary);
+    color: hsl(var(--primary-foreground));
+    box-shadow: var(--shadow-floating);
   }
 
-  /* High contrast text for readability */
+  /* Modern text styles */
   .farm-text-large {
     @apply text-xl font-semibold;
+    color: hsl(var(--foreground));
   }
 
   .farm-text-xl {
     @apply text-2xl font-bold;
+    color: hsl(var(--foreground));
   }
 
-  /* Pulse animation for microphone */
+  .farm-text-hero {
+    @apply text-3xl font-bold;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Enhanced animations */
   @keyframes pulse-gentle {
     0%, 100% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.05); opacity: 0.8; }
+    50% { transform: scale(1.05); opacity: 0.9; }
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
   }
 
   .pulse-gentle {
     animation: pulse-gentle 2s infinite;
   }
 
-  /* Mobile-specific optimizations */
+  .float-animation {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  /* Mobile optimizations */
   .mobile-safe {
     padding-top: max(1rem, var(--safe-area-inset-top));
     padding-bottom: max(1rem, var(--safe-area-inset-bottom));
@@ -160,5 +235,21 @@
   /* Touch-friendly scrolling */
   .scroll-smooth {
     -webkit-overflow-scrolling: touch;
+  }
+
+  /* Weather-style info cards */
+  .info-card {
+    background: var(--gradient-card);
+    backdrop-filter: blur(15px);
+    border: 1px solid hsl(0 0% 100% / 0.3);
+    border-radius: 1.5rem;
+    padding: 1.5rem;
+    box-shadow: var(--shadow-card);
+  }
+
+  .weather-card {
+    background: linear-gradient(135deg, hsl(200 70% 60% / 0.8), hsl(200 60% 70% / 0.6));
+    color: white;
+    backdrop-filter: blur(20px);
   }
 }

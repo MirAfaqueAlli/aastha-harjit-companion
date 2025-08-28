@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { ArrowLeft, AlertTriangle } from "lucide-react";
+import { ArrowLeft, AlertTriangle, CheckCircle, Clock } from "lucide-react";
 import yellowRustImage from "@/assets/yellow-rust-disease.jpg";
 
 interface DiagnosisResultsProps {
@@ -12,7 +11,6 @@ interface DiagnosisResultsProps {
 const DiagnosisResults = ({ language, onNavigate, capturedImage }: DiagnosisResultsProps) => {
   const isEnglish = language === 'en';
   
-  // Mock diagnosis data
   const diagnosis = {
     name: isEnglish ? 'Yellow Rust' : 'ਪੀਲੀ ਕੰਗੀ',
     severity: isEnglish ? 'Moderate' : 'ਮੱਧਮ',
@@ -32,94 +30,123 @@ const DiagnosisResults = ({ language, onNavigate, capturedImage }: DiagnosisResu
   ];
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen mobile-safe">
       {/* Header */}
-      <header className="bg-card shadow-sm p-4">
+      <header className="glass-card mx-4 mt-4 p-4 mb-6">
         <div className="flex items-center gap-3">
           <Button
             variant="ghost"
             size="icon"
             onClick={() => onNavigate('home')}
+            className="rounded-full"
           >
             <ArrowLeft className="h-6 w-6" />
           </Button>
-          <h1 className="farm-text-large text-primary">
+          <h1 className="farm-text-large">
             {isEnglish ? 'Diagnosis Results' : 'ਨਿਦਾਨ ਦੇ ਨਤੀਜੇ'}
           </h1>
         </div>
       </header>
 
-      <main className="p-4 space-y-6">
+      <main className="px-4 space-y-6">
         <div className="max-w-lg mx-auto space-y-6">
-          {/* Diagnosis Card */}
-          <Card className="p-6 space-y-4">
-            <div className="flex items-center gap-3 text-destructive">
-              <AlertTriangle className="h-6 w-6" />
-              <h2 className="farm-text-xl">{diagnosis.name}</h2>
+          {/* Diagnosis Status Card */}
+          <div className="floating-card p-6 space-y-4">
+            <div className="flex items-center gap-4">
+              <div className="bg-destructive/10 p-3 rounded-full">
+                <AlertTriangle className="h-8 w-8 text-destructive" />
+              </div>
+              <div className="flex-1">
+                <h2 className="farm-text-xl text-destructive">{diagnosis.name}</h2>
+                <p className="text-sm text-muted-foreground">
+                  {isEnglish ? 'Disease detected in your crop' : 'ਤੁਹਾਡੀ ਫ਼ਸਲ ਵਿੱਚ ਬਿਮਾਰੀ ਮਿਲੀ'}
+                </p>
+              </div>
             </div>
             
-            <div className="grid grid-cols-2 gap-4 text-sm">
-              <div>
-                <span className="text-muted-foreground">
-                  {isEnglish ? 'Severity:' : 'ਗੰਭੀਰਤਾ:'}
-                </span>
-                <p className="font-semibold">{diagnosis.severity}</p>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="info-card text-center">
+                <div className="text-lg font-bold text-destructive">{diagnosis.severity}</div>
+                <div className="text-xs text-muted-foreground">
+                  {isEnglish ? 'Severity' : 'ਗੰਭੀਰਤਾ'}
+                </div>
               </div>
-              <div>
-                <span className="text-muted-foreground">
-                  {isEnglish ? 'Confidence:' : 'ਭਰੋਸਾ:'}
-                </span>
-                <p className="font-semibold">{diagnosis.confidence}</p>
+              <div className="info-card text-center">
+                <div className="text-lg font-bold text-primary">{diagnosis.confidence}</div>
+                <div className="text-xs text-muted-foreground">
+                  {isEnglish ? 'Confidence' : 'ਭਰੋਸਾ'}
+                </div>
               </div>
             </div>
-          </Card>
+          </div>
 
-          {/* Disease Image */}
-          <Card className="p-4">
-            <h3 className="farm-text-large mb-4">
+          {/* Disease Reference Image */}
+          <div className="floating-card p-6 space-y-4">
+            <h3 className="farm-text-large">
               {isEnglish ? 'Disease Reference' : 'ਬਿਮਾਰੀ ਦਾ ਹਵਾਲਾ'}
             </h3>
-            <img 
-              src={yellowRustImage} 
-              alt={diagnosis.name}
-              className="w-full h-48 object-cover rounded-lg"
-            />
-          </Card>
+            <div className="relative rounded-2xl overflow-hidden">
+              <img 
+                src={yellowRustImage} 
+                alt={diagnosis.name}
+                className="w-full h-48 object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+              <div className="absolute bottom-4 left-4 text-white">
+                <p className="font-semibold">{diagnosis.name}</p>
+              </div>
+            </div>
+          </div>
 
-          {/* Advisory Section */}
-          <Card className="p-6 space-y-4">
-            <h3 className="farm-text-xl text-primary">
-              {isEnglish ? 'Treatment Advisory' : 'ਇਲਾਜ ਦੀ ਸਲਾਹ'}
-            </h3>
+          {/* Treatment Advisory */}
+          <div className="floating-card p-6 space-y-4">
+            <div className="flex items-center gap-3">
+              <div className="bg-primary/10 p-2 rounded-full">
+                <CheckCircle className="h-6 w-6 text-primary" />
+              </div>
+              <h3 className="farm-text-xl text-primary">
+                {isEnglish ? 'Treatment Plan' : 'ਇਲਾਜ ਦੀ ਯੋਜਨਾ'}
+              </h3>
+            </div>
             
-            <div className="space-y-3">
+            <div className="space-y-4">
               {advisory.map((step, index) => (
-                <div key={index} className="flex gap-3">
-                  <div className="flex-shrink-0 w-6 h-6 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-sm font-bold">
+                <div key={index} className="flex gap-4 items-start">
+                  <div className="flex-shrink-0 w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center text-sm font-bold">
                     {index + 1}
                   </div>
-                  <p className="farm-text-large flex-1">{step}</p>
+                  <div className="flex-1">
+                    <p className="text-sm leading-relaxed">{step}</p>
+                  </div>
                 </div>
               ))}
             </div>
-          </Card>
+
+            {/* Timeline */}
+            <div className="info-card mt-4">
+              <div className="flex items-center gap-2">
+                <Clock className="h-4 w-4 text-accent" />
+                <span className="text-sm font-medium">
+                  {isEnglish ? 'Expected recovery: 2-3 weeks' : 'ਰਿਕਵਰੀ ਦਾ ਸਮਾਂ: 2-3 ਹਫ਼ਤੇ'}
+                </span>
+              </div>
+            </div>
+          </div>
 
           {/* Action Buttons */}
           <div className="space-y-3">
             <Button
-              variant="farm-accent"
-              size="farm-wide"
+              variant="glass-accent"
+              className="w-full h-14"
               onClick={() => onNavigate('voice')}
-              className="w-full"
             >
               {isEnglish ? 'Ask More Questions' : 'ਹੋਰ ਸਵਾਲ ਪੁੱਛੋ'}
             </Button>
             
             <Button
-              variant="farm"
-              size="farm-wide"
+              variant="glass-primary"
+              className="w-full h-14"
               onClick={() => onNavigate('home')}
-              className="w-full"
             >
               {isEnglish ? 'Back to Home' : 'ਘਰ ਵਾਪਸ ਜਾਓ'}
             </Button>
